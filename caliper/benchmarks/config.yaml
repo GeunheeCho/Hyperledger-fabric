@@ -1,0 +1,36 @@
+test:
+  name: sbom-benchmark
+  description: SBOM 성능 테스트
+  workers:
+    number: 2
+  rounds:
+    - label: Create Asset 30
+      description: SBOM pdc
+      txDuration: 30
+      rateControl:
+        type: fixed-rate
+        opts:
+          tps: 30
+      workload:
+        module: workloads/pCreateAsset.js
+    # - label: Create Asset 10
+    #   description: SBOM pdc
+    #   txDuration: 30
+    #   rateControl:
+    #     type: fixed-rate
+    #     opts:
+    #       tps: 10
+    #   workload:
+    #     module: workloads/pCreateAsset.js
+monitors:
+  resource:
+  - module: docker
+    options:
+      interval: 3
+      containers:
+      - /peer0.org1.example.com
+      - /peer0.org2.example.com
+      - /orderer.example.com
+      charting:
+        bar:
+          metrics: [CPU%(avg)]
